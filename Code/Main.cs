@@ -10,8 +10,6 @@ namespace GolemClapAttackSpeedFix
 {
     internal static class Main
     {
-        internal static Animator FixedGolemAnimator;
-
         internal static void ClapState_OnEnter(ILContext il)
         {
             ILCursor c = new(il);

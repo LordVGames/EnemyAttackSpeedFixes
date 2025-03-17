@@ -1,8 +1,8 @@
 ﻿{
 	"name": "GolemClapAttackSpeedFix",
 	"version_number": "1.0.0",
-	"website_url": "",
-	"description": "Fixes stone golem's clap attack not scaling with attack speed.",
+	"website_url": "https://github.com/LordVGames/GolemClapAttackSpeedFix",
+	"description": "Fixes the stone golem's clap attack not scaling with attack speed.",
 	"dependencies": [
 		"bbepis-BepInExPack-5.4.2117",
 		"RiskofThunder-HookGenPatcher-1.2.5"
