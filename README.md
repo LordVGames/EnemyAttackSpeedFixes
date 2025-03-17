@@ -1,9 +1,13 @@
-# R2Boilerplate
+# GolemClapAttackSpeedFix
 
-This repository contains a sample mod for Risk of Rain 2.
+This fixes the actual attack part of the golem's melee clap attack not scaling with attack speed. Weirdly enough in vanilla the sound still scales with attack speed even though the attack itself doesn't, so it likely wasn't intentional.
 
-You can clone this repository, open the visual studio solution file and compile it immediately.
+<sub><sup>using videos for the before and after since they're too big as gifs surprisingly</sup></sub>
 
-This repository is meant to represent best practices for starting a simple mod.
+## Before
 
-Once your mod get compiled, you can utilize the Thunderstore folder for later uploading it to https://thunderstore.io/c/riskofrain2/
+https://github.com/user-attachments/assets/12652aa1-313f-403d-ac49-a334d1945ca6
+
+## After
+
+https://github.com/user-attachments/assets/38e187d7-bdc4-491f-86d1-b08887abaae7
