@@ -1,6 +1,10 @@
-# GolemClapAttackSpeedFix
+# EnemyAttackSpeedFixes
 
-This fixes the actual attack part of the golem's melee clap attack not scaling with attack speed. Weirdly enough in vanilla the sound still scales with attack speed even though the attack itself doesn't, so it likely wasn't intentional.
+This fixes a few enemy attacks not scaling with attack speed:
+- Stone golem clap attack
+- Mithrix hammer slam
+
+Weirdly enough in vanilla the sound for these attacks still scale with attack speed even though the attack itself doesn't, so these likely weren't intentional.
 
 ## Before
 

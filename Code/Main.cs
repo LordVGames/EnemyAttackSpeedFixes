@@ -6,7 +6,7 @@ using Mono.Cecil.Cil;
 using MonoMod.Cil;
 using RoR2;
 
-namespace GolemClapAttackSpeedFix
+namespace EnemyAttackSpeedFixes
 {
     internal static class Main
     {

@@ -1,14 +1,14 @@
 using BepInEx;
 using RoR2;
 
-namespace GolemClapAttackSpeedFix
+namespace EnemyAttackSpeedFixes
 {
     [BepInPlugin(PluginGUID, PluginName, PluginVersion)]
     public class Plugin : BaseUnityPlugin
     {
         public const string PluginGUID = PluginAuthor + "." + PluginName;
         public const string PluginAuthor = "LordVGames";
-        public const string PluginName = "GolemClapAttackSpeedFix";
+        public const string PluginName = "EnemyAttackSpeedFixes";
         public const string PluginVersion = "1.0.0";
         public void Awake()
         {

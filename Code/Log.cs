@@ -1,6 +1,6 @@
 ﻿using BepInEx.Logging;
 
-namespace GolemClapAttackSpeedFix
+namespace EnemyAttackSpeedFixes
 {
     internal static class Log
     {
