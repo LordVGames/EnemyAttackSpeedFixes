@@ -1,6 +1,6 @@
 ﻿{
 	"name": "EnemyAttackSpeedFixes",
-	"version_number": "1.0.0",
+	"version_number": "1.1.0",
 	"website_url": "https://github.com/LordVGames/EnemyAttackSpeedFixes",
 	"description": "Fixes attacks from mithrix & stone golems not scaling with attack speed.",
 	"dependencies": [

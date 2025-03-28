@@ -6,17 +6,19 @@ namespace EnemyAttackSpeedFixes
     [BepInPlugin(PluginGUID, PluginName, PluginVersion)]
     public class Plugin : BaseUnityPlugin
     {
+        public static PluginInfo PluginInfo { get; private set; }
         public const string PluginGUID = PluginAuthor + "." + PluginName;
         public const string PluginAuthor = "LordVGames";
         public const string PluginName = "EnemyAttackSpeedFixes";
-        public const string PluginVersion = "1.0.0";
+        public const string PluginVersion = "1.1.0";
         public void Awake()
         {
+            PluginInfo = Info;
             Log.Init(Logger);
+            //ModAssets.Init();
 
-            IL.EntityStates.GolemMonster.ClapState.OnEnter += Main.ClapState_OnEnter;
-            IL.EntityStates.GolemMonster.ClapState.FixedUpdate += Main.ClapState_FixedUpdate;
-            IL.EntityStates.GolemMonster.ClapState.OnExit += Main.ClapState_OnExit;
+            Main.StoneGolem.SetupILHooks();
+            Main.Mithrix.SetupILHooks();
         }
     }
 }

@@ -199,7 +199,7 @@ PublishScripts/
 # NuGet Symbol Packages
 *.snupkg
 # The packages folder can be ignored because of Package Restore
-**/[Pp]ackages/*
+# **/[Pp]ackages/*
 # except build/, which is used as an MSBuild target.
 !**/[Pp]ackages/build/
 # Uncomment if necessary however generally it will be regenerated when needed
@@ -400,8 +400,7 @@ FodyWeavers.xsd
 *.sln.iml
 
 # Manually added for the unity project
-/ModAssetsUnityProject/unchainedartifacticons/AssetBundles
-/ModAssetsUnityProject/unchainedartifacticons/Library
-/ModAssetsUnityProject/unchainedartifacticons/Logs
-/ModAssetsUnityProject/unchainedartifacticons/Temp
-/ModAssetsUnityProject/unchainedartifacticons/UserSettings
+/Unity/PROJECTNAME/AssetBundles
+/Unity/PROJECTNAME/Library
+/Unity/PROJECTNAME/Logs
+/Unity/PROJECTNAME/Temp
