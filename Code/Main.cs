@@ -168,16 +168,7 @@ namespace EnemyAttackSpeedFixes
                 c.Emit(OpCodes.Ldarg_0);
                 c.EmitDelegate<Func<float, EntityStates.BrotherMonster.WeaponSlam, float>>((slamStateDuration, currentSlamState) =>
                 {                    
-
-                    //Log.Warning($"currentSlamState.attackSpeedStat is {currentSlamState.attackSpeedStat}");
-                    //Log.Warning($"slamStateDuration is {slamStateDuration}");
-
-
-                    float newDuration = (slamStateDuration / currentSlamState.attackSpeedStat);
-                    //Log.Debug(currentSlamState.modelAnimator.GetFloat("WeaponSlam.playbackRate"));
-                    //Log.Warning($"newDuration is {newDuration}");
-                    //Log.Warning($"currentSlamState.fixedAge is {currentSlamState.fixedAge}");
-                    return newDuration;
+                    return slamStateDuration / currentSlamState.attackSpeedStat;
                 });
             }
 
