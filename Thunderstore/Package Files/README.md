@@ -2,9 +2,15 @@
 
 This fixes a few enemy attacks not scaling with attack speed:
 - Stone golem's clap attack
+- Stone titan fist attack
+- Stone titan orb
+- - Fire rate
+- - Rise speed (the titan animation is scaled but not the orb's speed)
+- Stone titan laser tick rate
+- All of the stone titan fixes also apply to Aurelionite
 - Mithrix's hammer slam
 
-Weirdly enough in vanilla the sound for these attacks still scale with attack speed even though the attack itself doesn't, so these likely weren't intentional.
+Weirdly enough in vanilla the sound for some of these attacks still scale with attack speed even though the attack itself doesn't, so these likely weren't intentional.
 
 ## Before
 
