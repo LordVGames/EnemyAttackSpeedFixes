@@ -10,7 +10,7 @@ namespace EnemyAttackSpeedFixes
         public const string PluginGUID = PluginAuthor + "." + PluginName;
         public const string PluginAuthor = "LordVGames";
         public const string PluginName = "EnemyAttackSpeedFixes";
-        public const string PluginVersion = "1.3.0";
+        public const string PluginVersion = "1.3.1";
         public void Awake()
         {
             PluginInfo = Info;

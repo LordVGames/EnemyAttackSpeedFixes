@@ -8,6 +8,7 @@ This fixes a few enemy attacks not scaling with attack speed:
 - - Rise speed (the titan animation is scaled but not the orb's speed)
 - Stone titan laser tick rate
 - All of the stone titan fixes also apply to Aurelionite
+- Parent's ground slam attack
 - Mithrix's hammer slam
 
 Weirdly enough in vanilla the sound for some of these attacks still scale with attack speed even though the attack itself doesn't, so these likely weren't intentional.

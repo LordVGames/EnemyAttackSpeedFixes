@@ -1,3 +1,7 @@
+## 1.3.1
+
+- forgor readme
+
 ## 1.3.0
 
 - Fixed parent ground slam attack not scaling with attack speed
