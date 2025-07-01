@@ -37,7 +37,7 @@ namespace EnemyAttackSpeedFixes
                 }
                 else
                 {
-                    MakeDurationUseAttackSpeed(c);
+                    MakeDurationAndAnimatorUseAttackSpeed(c);
                 }
             }
 
@@ -51,32 +51,40 @@ namespace EnemyAttackSpeedFixes
                     x => x.MatchLdsfld<EntityStates.GolemMonster.ClapState>("duration")
                 ))
                 {
-                    Log.Error($"COULD NOT IL HOOK {il.Method.Name}");
+                    Log.Error($"COULD NOT IL HOOK {il.Method.Name} PART 1");
                     LogILStuff(il, c);
                 }
                 else
                 {
-                    MakeDurationUseAttackSpeed(c);
+                    MakeDurationAndAnimatorUseAttackSpeed(c);
                 }
+
+
+
+                if (!c.TryGotoNext(MoveType.Before,
+                    x => x.MatchLdarg(0),
+                    x => x.MatchLdfld<EntityStates.EntityState>("outer")
+                ))
+                {
+                    Log.Error($"COULD NOT IL HOOK {il.Method.Name} PART 2");
+                    LogILStuff(il, c);
+                    return;
+                }
+
+                ResetAnimatorSpeed(c);
             }
-
-
 
             private static void ClapState_OnExit(ILContext il)
             {
                 ILCursor c = new(il);
 
                 // don't need to go to any specific line, we can just throw our own il at the start and it's fine
-                c.Emit(OpCodes.Ldarg_0);
-                c.EmitDelegate<Action<EntityStates.GolemMonster.ClapState>>((clapState) =>
-                {
-                    clapState.modelAnimator.speed = 1;
-                });
+                ResetAnimatorSpeed(c);
             }
 
 
 
-            private static void MakeDurationUseAttackSpeed(ILCursor c)
+            private static void MakeDurationAndAnimatorUseAttackSpeed(ILCursor c)
             {
                 c.Emit(OpCodes.Ldarg_0);
                 c.EmitDelegate<Func<float, EntityStates.GolemMonster.ClapState, float>>((clapStateDuration, currentClapState) =>
@@ -85,99 +93,22 @@ namespace EnemyAttackSpeedFixes
                     return clapStateDuration / currentClapState.attackSpeedStat;
                 });
             }
-        }
-
-
-        internal static class Mithrix
-        {
-            internal static void SetupILHooks()
-            {
-                IL.EntityStates.BrotherMonster.WeaponSlam.OnEnter += WeaponSlam_OnEnter;
-                IL.EntityStates.BrotherMonster.WeaponSlam.FixedUpdate += WeaponSlam_FixedUpdate;
-                IL.EntityStates.BrotherMonster.WeaponSlam.OnExit += WeaponSlam_OnExit;
-            }
-
-            private static void WeaponSlam_OnEnter(ILContext il)
-            {
-                ILCursor c = new(il);
-
-                if (!c.TryGotoNext(MoveType.After,
-                    x => x.MatchLdstr("WeaponSlam"),
-                    x => x.MatchLdstr("WeaponSlam.playbackRate"),
-                    x => x.MatchLdsfld<EntityStates.BrotherMonster.WeaponSlam>("duration")
-                ))
-                {
-                    Log.Error($"COULD NOT IL HOOK {il.Method.Name}");
-                    LogILStuff(il, c);
-                }
-                else
-                {
-                    MakeDurationUseAttackSpeed(c);
-                    c.Next.Operand = 0.05f;
-                }
-            }
-
-            private static void WeaponSlam_FixedUpdate(ILContext il)
-            {
-                ILCursor c = new(il);
-
-                if (!c.TryGotoNext(MoveType.After,
-                    x => x.MatchLdarg(0),
-                    x => x.MatchCall(out _),
-                    x => x.MatchLdsfld<EntityStates.BrotherMonster.WeaponSlam>("duration")
-                ))
-                {
-                    Log.Error($"COULD NOT IL HOOK {il.Method.Name} PART 1");
-                    LogILStuff(il, c);
-                }
-                else
-                {
-                    MakeDurationUseAttackSpeed(c);
-                }
-
-                if (!c.TryGotoNext(MoveType.AfterLabel,
-                    x => x.MatchLdarg(0),
-                    x => x.MatchLdfld<EntityStates.EntityState>("outer"),
-                    x => x.MatchCallvirt(out _)
-                ))
-                {
-                    Log.Error($"COULD NOT IL HOOK {il.Method.Name} PART 2");
-                    LogILStuff(il, c);
-                }
-                else
-                {
-                    // maybe helps the attack not coming out at high attack speeds?
-                    // idk anymore so im leaving it in
-                    ResetEntityStateAnimatorSpeed(c);
-                }
-            }
-
-            private static void WeaponSlam_OnExit(ILContext il)
-            {
-                ILCursor c = new(il);
-
-                // don't need to go to any specific line, we can just throw our own il at the start and it's fine
-                c.Index = 0;
-                ResetEntityStateAnimatorSpeed(c);
-            }
-
-
 
             private static void MakeDurationUseAttackSpeed(ILCursor c)
             {
                 c.Emit(OpCodes.Ldarg_0);
-                c.EmitDelegate<Func<float, EntityStates.BrotherMonster.WeaponSlam, float>>((slamStateDuration, currentSlamState) =>
-                {                    
-                    return slamStateDuration / currentSlamState.attackSpeedStat;
+                c.EmitDelegate<Func<float, EntityStates.GolemMonster.ClapState, float>>((clapStateDuration, currentClapState) =>
+                {
+                    return clapStateDuration / currentClapState.attackSpeedStat;
                 });
             }
 
-            private static void ResetEntityStateAnimatorSpeed(ILCursor c)
+            private static void ResetAnimatorSpeed(ILCursor c)
             {
                 c.Emit(OpCodes.Ldarg_0);
-                c.EmitDelegate<Action<EntityStates.BrotherMonster.WeaponSlam>>((slamState) =>
+                c.EmitDelegate<Action<EntityStates.GolemMonster.ClapState>>((clapState) =>
                 {
-                    slamState.modelAnimator.speed = 1;
+                    clapState.modelAnimator.speed = 1;
                 });
             }
         }
@@ -506,6 +437,204 @@ namespace EnemyAttackSpeedFixes
                 });
             }
         }
+
+
+        internal static class Parent
+        {
+            internal static void SetupILHooks()
+            {
+                IL.EntityStates.ParentMonster.GroundSlam.OnEnter += GroundSlam_OnEnter;
+                IL.EntityStates.ParentMonster.GroundSlam.FixedUpdate += GroundSlam_FixedUpdate;
+                IL.EntityStates.ParentMonster.GroundSlam.OnExit += GroundSlam_OnExit;
+            }
+
+
+
+            private static void GroundSlam_OnEnter(ILContext il)
+            {
+                ILCursor c = new(il);
+
+                if (!c.TryGotoNext(MoveType.After,
+                    x => x.MatchLdstr("Slam"),
+                    x => x.MatchLdstr("Slam.playbackRate"),
+                    x => x.MatchLdsfld<EntityStates.ParentMonster.GroundSlam>("duration")
+                ))
+                {
+                    Log.Error($"COULD NOT IL HOOK {il.Method.Name}");
+                    LogILStuff(il, c);
+                }
+                else
+                {
+                    MakeDurationAndAnimatorUseAttackSpeed(c);
+                }
+            }
+
+            private static void GroundSlam_FixedUpdate(ILContext il)
+            {
+                ILCursor c = new(il);
+
+                if (!c.TryGotoNext(MoveType.After,
+                    x => x.MatchLdarg(0),
+                    x => x.MatchCall(out _),
+                    x => x.MatchLdsfld<EntityStates.ParentMonster.GroundSlam>("duration")
+                ))
+                {
+                    Log.Error($"COULD NOT IL HOOK {il.Method.Name} PART 1");
+                    LogILStuff(il, c);
+                }
+                else
+                {
+                    MakeDurationUseAttackSpeed(c);
+                }
+
+
+
+                if (!c.TryGotoNext(MoveType.Before,
+                    x => x.MatchLdarg(0),
+                    x => x.MatchLdfld<EntityStates.EntityState>("outer")
+                ))
+                {
+                    Log.Error($"COULD NOT IL HOOK {il.Method.Name} PART 2");
+                    LogILStuff(il, c);
+                    return;
+                }
+
+                ResetAnimatorSpeed(c);
+            }
+
+            private static void GroundSlam_OnExit(ILContext il)
+            {
+                ILCursor c = new(il);
+
+                ResetAnimatorSpeed(c);
+            }
+
+
+
+            private static void MakeDurationAndAnimatorUseAttackSpeed(ILCursor c)
+            {
+                c.Emit(OpCodes.Ldarg_0);
+                c.EmitDelegate<Func<float, EntityStates.ParentMonster.GroundSlam, float>>((slamStateDuration, currentSlamState) =>
+                {
+                    currentSlamState.modelAnimator.speed = 1 * currentSlamState.attackSpeedStat;
+                    return slamStateDuration / currentSlamState.attackSpeedStat;
+                });
+            }
+
+            private static void MakeDurationUseAttackSpeed(ILCursor c)
+            {
+                c.Emit(OpCodes.Ldarg_0);
+                c.EmitDelegate<Func<float, EntityStates.ParentMonster.GroundSlam, float>>((slamStateDuration, currentSlamState) =>
+                {
+                    return slamStateDuration / currentSlamState.attackSpeedStat;
+                });
+            }
+
+            private static void ResetAnimatorSpeed(ILCursor c)
+            {
+                c.Emit(OpCodes.Ldarg_0);
+                c.EmitDelegate<Action<EntityStates.ParentMonster.GroundSlam>>((slamState) =>
+                {
+                    slamState.modelAnimator.speed = 1;
+                });
+            }
+        }
+
+
+        internal static class Mithrix
+        {
+            internal static void SetupILHooks()
+            {
+                IL.EntityStates.BrotherMonster.WeaponSlam.OnEnter += WeaponSlam_OnEnter;
+                IL.EntityStates.BrotherMonster.WeaponSlam.FixedUpdate += WeaponSlam_FixedUpdate;
+                IL.EntityStates.BrotherMonster.WeaponSlam.OnExit += WeaponSlam_OnExit;
+            }
+
+            private static void WeaponSlam_OnEnter(ILContext il)
+            {
+                ILCursor c = new(il);
+
+                if (!c.TryGotoNext(MoveType.After,
+                    x => x.MatchLdstr("WeaponSlam"),
+                    x => x.MatchLdstr("WeaponSlam.playbackRate"),
+                    x => x.MatchLdsfld<EntityStates.BrotherMonster.WeaponSlam>("duration")
+                ))
+                {
+                    Log.Error($"COULD NOT IL HOOK {il.Method.Name}");
+                    LogILStuff(il, c);
+                }
+                else
+                {
+                    MakeDurationUseAttackSpeed(c);
+                    c.Next.Operand = 0.05f;
+                }
+            }
+
+            private static void WeaponSlam_FixedUpdate(ILContext il)
+            {
+                ILCursor c = new(il);
+
+                if (!c.TryGotoNext(MoveType.After,
+                    x => x.MatchLdarg(0),
+                    x => x.MatchCall(out _),
+                    x => x.MatchLdsfld<EntityStates.BrotherMonster.WeaponSlam>("duration")
+                ))
+                {
+                    Log.Error($"COULD NOT IL HOOK {il.Method.Name} PART 1");
+                    LogILStuff(il, c);
+                }
+                else
+                {
+                    MakeDurationUseAttackSpeed(c);
+                }
+
+                if (!c.TryGotoNext(MoveType.AfterLabel,
+                    x => x.MatchLdarg(0),
+                    x => x.MatchLdfld<EntityStates.EntityState>("outer"),
+                    x => x.MatchCallvirt(out _)
+                ))
+                {
+                    Log.Error($"COULD NOT IL HOOK {il.Method.Name} PART 2");
+                    LogILStuff(il, c);
+                }
+                else
+                {
+                    // maybe helps the attack not coming out at high attack speeds?
+                    // idk anymore so im leaving it in
+                    ResetEntityStateAnimatorSpeed(c);
+                }
+            }
+
+            private static void WeaponSlam_OnExit(ILContext il)
+            {
+                ILCursor c = new(il);
+
+                // don't need to go to any specific line, we can just throw our own il at the start and it's fine
+                c.Index = 0;
+                ResetEntityStateAnimatorSpeed(c);
+            }
+
+
+
+            private static void MakeDurationUseAttackSpeed(ILCursor c)
+            {
+                c.Emit(OpCodes.Ldarg_0);
+                c.EmitDelegate<Func<float, EntityStates.BrotherMonster.WeaponSlam, float>>((slamStateDuration, currentSlamState) =>
+                {
+                    return slamStateDuration / currentSlamState.attackSpeedStat;
+                });
+            }
+
+            private static void ResetEntityStateAnimatorSpeed(ILCursor c)
+            {
+                c.Emit(OpCodes.Ldarg_0);
+                c.EmitDelegate<Action<EntityStates.BrotherMonster.WeaponSlam>>((slamState) =>
+                {
+                    slamState.modelAnimator.speed = 1;
+                });
+            }
+        }
+
 
         private static void LogILStuff(ILContext il, ILCursor c)
         {

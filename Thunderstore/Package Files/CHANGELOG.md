@@ -1,3 +1,7 @@
+## 1.3.0
+
+- Fixed parent ground slam attack not scaling with attack speed
+
 ## 1.2.0
 
 - Fixed stone titan fist attacks not scaling with attack speed

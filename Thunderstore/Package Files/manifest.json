@@ -1,6 +1,6 @@
 ﻿{
 	"name": "EnemyAttackSpeedFixes",
-	"version_number": "1.2.0",
+	"version_number": "1.3.0",
 	"website_url": "https://github.com/LordVGames/EnemyAttackSpeedFixes",
 	"description": "Fixes attacks from various enemies not scaling with attack speed.",
 	"dependencies": [
